@@ -1,6 +1,6 @@
 package houzm.accumulation.redis.sort;
 
-import houzm.accumulation.redis.pool.RedisUtil;
+import houzm.accumulation.common.RedisUtil;
 import redis.clients.jedis.Jedis;
 
 import java.util.HashMap;
