@@ -68,6 +68,13 @@ public class RedisUtil {
     }
 
     /**
+     * 获取默认链接
+     * @return
+     */
+    public static Jedis getJedis() {
+        return getJedis("47.101.152.55", 6379);
+    }
+    /**
      * 从池中获取连接
      * @param ip
      * @param port
