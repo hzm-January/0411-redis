@@ -1,6 +1,6 @@
 package houzm.accumulation.redis.string;
 
-import houzm.accumulation.redis.pool.RedisUtil;
+import houzm.accumulation.common.RedisUtil;
 import redis.clients.jedis.Jedis;
 
 import java.util.concurrent.TimeUnit;
@@ -32,16 +32,14 @@ import java.util.concurrent.TimeUnit;
  * 可以考虑使用 UNIX 时间戳作为时间序列的键名，这样一来，可以避免单个 key 因为保存过大的时间序列而占用大量内存，另一方面，也可以节省下大量命名空间。
  */
 public class Append {
-    private static Jedis jedis;
-
-    static {
-//        jedis = RedisUtil.getJedis("192.168.1.111", 6379);
-//        jedis = RedisUtil.getJedis("192.168.202.111", 6379);
-        jedis = RedisUtil.getJedis("47.101.152.55", 6379);
-    }
+    private static Jedis jedis= RedisUtil.getJedis();
 
     public static void main(String[] args) throws InterruptedException {
         String key = "skin";
+        String value = "skin-value";
+        jedis.del(key);
+        //append 追加操作测试
+        System.out.println("redis-string-append-key不存在：" + jedis.append(key, value)); //10
 //        System.out.println("key是否存在：" + jedis.exists(key)); //false
 //        System.out.println("append " + key + " : " + jedis.append(key, "myskin")); //6
 //        System.out.println("key："+key + " value:" + jedis.get(key)); //myskin
@@ -49,14 +47,16 @@ public class Append {
 //        System.out.println("key："+key + " value: " + jedis.get(key)); //myskin--after
 
 
+        //时间序列
         String timeSeries = "TimeSeries";
+        jedis.del(timeSeries);
         int fixedSize = String.valueOf(System.currentTimeMillis()).length();
         System.out.println("时间序列-TimeSeries定长 : " + fixedSize); //13
         System.out.println("时间序列-append : " + jedis.append(timeSeries, String.valueOf(System.currentTimeMillis()))); //13
-//        TimeUnit.SECONDS.sleep(1);
-//        System.out.println("时间序列-append : " + jedis.append(timeSeries, String.valueOf(System.currentTimeMillis()))); //26
-//        TimeUnit.SECONDS.sleep(1);
-//        System.out.println("时间序列-append : " + jedis.append(timeSeries, String.valueOf(System.currentTimeMillis()))); //39
+        TimeUnit.SECONDS.sleep(1);
+        System.out.println("时间序列-append : " + jedis.append(timeSeries, String.valueOf(System.currentTimeMillis()))); //26
+        TimeUnit.SECONDS.sleep(1);
+        System.out.println("时间序列-append : " + jedis.append(timeSeries, String.valueOf(System.currentTimeMillis()))); //39
         System.out.println("时间序列-getrange: " + jedis.getrange(timeSeries, 0, fixedSize - 1)); //1545113170376
         System.out.println("时间序列-getrange: " + jedis.getrange(timeSeries, fixedSize, 2 * fixedSize - 1)); //1545113171388
         System.out.println("时间序列-get：" + jedis.get(timeSeries)); //1545113170376154511317138815451131724061545113269459154511327137115451132723801545113505415
