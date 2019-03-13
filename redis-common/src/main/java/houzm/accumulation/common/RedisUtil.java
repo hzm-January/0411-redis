@@ -106,6 +106,14 @@ public class RedisUtil {
         jedis.close();
     }
 
+    /**
+     * 关闭连接池
+     */
+    public static void shutdown() {
+        for (JedisPool pool : maps.values()) {
+            pool.close();
+        }
+    }
 
     private static class RedisConfig {
         //可用连接实例的最大数目，默认值为8；

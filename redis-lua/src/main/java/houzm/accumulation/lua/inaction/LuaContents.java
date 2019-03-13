@@ -6,9 +6,15 @@ package houzm.accumulation.lua.inaction;
  * description: lua
  */
 public enum LuaContents {
-    ;
+    DISTRIBUTED_LOCK("distributedlock", ""),
+    WINDOWS_LIMIT("windowslimit", "");
     private String name;
     private String scriptContent;
+
+    LuaContents(String name, String scriptContent) {
+        this.name = name;
+        this.scriptContent = scriptContent;
+    }
 
     public String getName() {
         return name;
